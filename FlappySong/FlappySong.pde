@@ -23,7 +23,7 @@ void setup() {
 
     balloon = loadImage("balloon.png");
     note = loadImage("note.png");
-    background= loadImage("sky.png"); 
+    background = loadImage("sky.png"); 
 
     balloonX = width / 2;
     balloonY = height / 2;
@@ -40,7 +40,6 @@ void draw() {
     
     // funkar denna korrekt?
 
-    //balloonInsideWindow();
     //ritar cirkeln
     // ellipse(balloonX, balloonY, 50, 50); 
 
@@ -60,20 +59,22 @@ void draw() {
     textSize(42);
     text(counter, 40, 80);
 
+    println("balloon height: " + balloon.height + ", balloon width: " + balloon.width);
+
     update();
 }
 
 void update() {
-  if (down == true) {
+  if (down == true && balloonY + balloon.height/2 < height) {
     balloonY += speed;
   }
-  if (up == true) {
+  if (up == true && balloonY > 0 + balloon.height / 2) {
     balloonY -= speed;
   }
-  if (left == true) {
+  if (left == true && balloonX > 0 + balloon.width / 2) {
     balloonX -= speed;
   }
-  if (right == true) {
+  if (right == true && balloonX < width - balloon.width/2) {
     balloonX += speed;
   }
 }
@@ -137,17 +138,7 @@ boolean isBalloonOverNote() {
     }
 }
 
-void balloonInsideWindow() {
-  if (balloonY < 0+balloon.height) {
-        balloonY = 0+balloon.height; 
-    } else if (balloonY > height-balloon.height) {
-          balloonY = height-balloon.height; 
-      } else if (balloonX < 0+balloon.width) {
-          balloonX= 0+balloon.width; 
-      } else if (balloonX > width-balloon.width){
-           balloonX= width-balloon.width; 
-      }
-}
+
 
 void oscEvent(OscMessage message) {
 
