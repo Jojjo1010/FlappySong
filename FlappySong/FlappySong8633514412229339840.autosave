@@ -83,15 +83,10 @@ void startScreen() {
 
   void playWithMic() {
    loadGame(); 
-
-   updateX();
 }
   
   void playWithKeys() {
     loadGame(); 
-
-    updateX();
-    updateY(); 
 }
   void loadGame() {
     background(background);
@@ -109,23 +104,21 @@ void startScreen() {
     text(counter, 40, 80);
     
     pointCounter();
-}
-
-void updateX() {
+    
+    update();
+  }
+  void update() {
+    if (down == true && balloonY + balloon.height / 2 < height) {
+        balloonY += speed;
+    }
+    if (up == true && balloonY > 0 + balloon.height / 2) {
+        balloonY -= speed;
+    }
     if (left == true && balloonX > 0 + balloon.width / 2) {
         balloonX -= speed;
     }
     if (right == true && balloonX < width - balloon.width / 2) {
         balloonX += speed;
-    }
-}
-
-void updateY() {
-    if (down == true && balloonY + balloon.height / 2 < height) {
-          balloonY += speed;
-    }
-    if (up == true && balloonY > 0 + balloon.height / 2) {
-          balloonY -= speed;
     }
 }
   
@@ -208,23 +201,22 @@ void mousePressed() {
   
   
   void oscEvent(OscMessage message) {
-    if (state == 1) {
-        float frequency;
-        
-        message.setAddrPattern("/audio/frequency");
-        frequency = message.get(0).floatValue();
-        
-        // försöker ta bort cirkelrörelse från bakgrundsljud
-        // genom att filtrera bort under 200
-        if (frequency > 350.0) {
-            // Dividerar med 3 för att justera för vissel-frekvenser
-            // Subtraherar med 200 för att få den att börja ungefär vid 0
-            balloonY = (frequency - 600) / 4;
-        }
-        
-        println(message.checkAddrPattern("/audio/frequency"));
-        // println(theOscMessage.addrInt());
-        
-        // println(balloonY);
+    if ()
+    float frequency;
+    
+    message.setAddrPattern("/audio/frequency");
+    frequency = message.get(0).floatValue();
+    
+    // försöker ta bort cirkelrörelse från bakgrundsljud
+    // genom att filtrera bort under 200
+    if (frequency > 350.0) {
+        // Dividerar med 3 för att justera för vissel-frekvenser
+        // Subtraherar med 200 för att få den att börja ungefär vid 0
+        balloonY = (frequency - 600) / 4;
     }
+    
+    println(message.checkAddrPattern("/audio/frequency"));
+    // println(theOscMessage.addrInt());
+    
+    // println(balloonY);
 }

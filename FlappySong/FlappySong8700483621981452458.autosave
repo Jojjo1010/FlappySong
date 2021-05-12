@@ -34,8 +34,8 @@ void setup() {
     
     setNotePosition(); 
 
-    playWithMicButton = new Button(loadImage("playWithMic.png"),loadImage("playWithMicHover.png"),100,500); 
-    playWithKeysButton = new Button (loadImage("playWithKeys.png"),loadImage("playWithKeysHover.png"),700,500); 
+    playWithMicButton = new Button(loadImage("playWithMic.png"),loadImage("playWithMicHover.png"),100,600); 
+    playWithKeysButton = new Button (loadImage("playWithKeys.png"),loadImage("playWithKeysHover.png"),700,600); 
 
     
     speed = 5;
@@ -61,20 +61,14 @@ void draw() {
 
 void startScreen() {
     background(background);
-
-    String title;
     String gameDescription1;
     String gameDescription2;
-    title = "GameTitle";
     gameDescription1 = "Whistle to help the balloon gather its notes!"; 
-    gameDescription2 = "You can also play with just the keys";
+    gameDescription2 = "You can also play with just the k";
 
     textAlign(CENTER);
-    textSize(60);
-    text(title, width / 2, 200);
     textSize(30); 
-    text(gameDescription1, width / 2, 300); 
-    text(gameDescription2, width / 2, 350); 
+    text(gameDescription1, width / 2, 200); 
 
     playWithKeysButton.display(); 
     playWithMicButton.display(); 
@@ -82,18 +76,6 @@ void startScreen() {
 }
 
   void playWithMic() {
-   loadGame(); 
-
-   updateX();
-}
-  
-  void playWithKeys() {
-    loadGame(); 
-
-    updateX();
-    updateY(); 
-}
-  void loadGame() {
     background(background);
     
     imageMode(CENTER);
@@ -109,23 +91,42 @@ void startScreen() {
     text(counter, 40, 80);
     
     pointCounter();
+    
+    update();
 }
-
-void updateX() {
+  
+  void playWithKeys() {
+    background(background);
+    
+    imageMode(CENTER);
+    
+    // ritar not
+    image(note, noteX, noteY, 80, 80);
+    
+    // ritar luftballong
+    image(balloon, balloonX, balloonY);
+    
+    //ritar counter 
+    textSize(42);
+    text(counter, 40, 80);
+    
+    pointCounter();
+    
+    update();
+}
+  
+  void update() {
+    if (down == true && balloonY + balloon.height / 2 < height) {
+        balloonY += speed;
+    }
+    if (up == true && balloonY > 0 + balloon.height / 2) {
+        balloonY -= speed;
+    }
     if (left == true && balloonX > 0 + balloon.width / 2) {
         balloonX -= speed;
     }
     if (right == true && balloonX < width - balloon.width / 2) {
         balloonX += speed;
-    }
-}
-
-void updateY() {
-    if (down == true && balloonY + balloon.height / 2 < height) {
-          balloonY += speed;
-    }
-    if (up == true && balloonY > 0 + balloon.height / 2) {
-          balloonY -= speed;
     }
 }
   
@@ -174,16 +175,6 @@ void updateY() {
      }
     }
 }
-
-void mousePressed() {
-  if(playWithMicButton.isMouseOverButton()) {
-    state=1; 
-  } 
-
-  if(playWithKeysButton.isMouseOverButton()) {
-    state=2; 
-  }
-}
   
   float randomizeFloat(float min, float max) {
     float pos;
@@ -208,23 +199,22 @@ void mousePressed() {
   
   
   void oscEvent(OscMessage message) {
-    if (state == 1) {
-        float frequency;
-        
-        message.setAddrPattern("/audio/frequency");
-        frequency = message.get(0).floatValue();
-        
-        // försöker ta bort cirkelrörelse från bakgrundsljud
-        // genom att filtrera bort under 200
-        if (frequency > 350.0) {
-            // Dividerar med 3 för att justera för vissel-frekvenser
-            // Subtraherar med 200 för att få den att börja ungefär vid 0
-            balloonY = (frequency - 600) / 4;
-        }
-        
-        println(message.checkAddrPattern("/audio/frequency"));
-        // println(theOscMessage.addrInt());
-        
-        // println(balloonY);
+    
+    float frequency;
+    
+    message.setAddrPattern(" / audio / frequency");
+    frequency = message.get(0).floatValue();
+    
+    // försöker ta bort cirkelrörelse från bakgrundsljud
+    // genom att filtrera bort under 200
+    if (frequency > 350.0) {
+        // Dividerar med 3 för att justera för vissel-frekvenser
+        // Subtraherar med 200 för att få den att börja ungefär vid 0
+        balloonY = (frequency - 600) / 4;
     }
+    
+    println(message.checkAddrPattern(" / audio / frequency"));
+    // println(theOscMessage.addrInt());
+    
+    // println(balloonY);
 }
