@@ -3,61 +3,78 @@ import oscP5.*;
 
 OscP5 oscP5;
 
-float posX, posY; 
+float balloonX, balloonY; 
+float noteX, noteY; 
+int counter; 
 
 boolean down, up, left, right;
 float speed;
 
 PImage balloon;
+PImage note;
+PImage background; 
 
 void setup() {
 
     size(1200,800);
+    
 
     oscP5 = new OscP5(this, 7348);
 
     balloon = loadImage("balloon.png");
+    note = loadImage("note.png");
+    background= loadImage("sky.png"); 
 
-    posX = width / 2;
-    posY = height / 2;
+    balloonX = width / 2;
+    balloonY = height / 2;
+
+    setNotePosition(); 
 
     speed = 5;
 }
 
 void draw() {
-    background(#4488ff);
+    background(background);
     
-    //kollar ifall cirkeln är utanför fönstret. Om den är det gör den att cirkeln hamnar i fönstret
+    //kollar ifall ballongen är utanför fönstret. Om den är det gör den att hallongen hamnar i fönstret
     
-    if (posY < 0) {
-        posY = 0; 
-    } else if (posY > height) {
-          posY = height; 
-      }
+    // funkar denna korrekt?
 
-
+    //balloonInsideWindow();
     //ritar cirkeln
-    // ellipse(posX, posY, 50, 50); 
+    // ellipse(balloonX, balloonY, 50, 50); 
 
-    // ritar luftballong
     imageMode(CENTER);
-    image(balloon, posX, posY, 200, 200);
+
+    // ritar not
+    image(note, noteX, noteY, 80, 80);
+    
+    // ritar luftballong
+    image(balloon, balloonX, balloonY, 200, 200);
+
+    if(isBalloonOverNote()) {
+      counter++; 
+      setNotePosition();
+    } 
+
+    textSize(42);
+    text(counter, 40, 80);
 
     update();
 }
 
 void update() {
   if (down == true) {
-    posY += speed;
+    balloonY += speed;
   }
   if (up == true) {
-    posY -= speed;
+    balloonY -= speed;
   }
   if (left == true) {
-    posX -= speed;
+    balloonX -= speed;
   }
   if (right == true) {
-    posX += speed;
+    balloonX += speed;
   }
 }
 
@@ -99,6 +116,39 @@ void keyReleased() {
   }
 }
 
+float randomizeFloat(float min, float max) {
+  float pos;
+  pos = random(min, max);
+  return pos;
+}
+
+void setNotePosition() {
+  noteX = randomizeFloat(0, width); 
+  noteY = randomizeFloat(0, height); 
+}
+
+boolean isBalloonOverNote() {
+  // if (balloonX > noteX && balloonX < noteX + note.width / 2 && balloonY > noteY && balloonY < noteY + note.height / 2) {
+    if (balloonX > noteX - note.width / 2 && balloonX < noteX + note.width / 2 &&
+      balloonY > noteY - note.height / 2 && balloonY < noteY + note.height / 2) {
+      return true;
+    } else {
+      return false;
+    }
+}
+
+void balloonInsideWindow() {
+  if (balloonY < 0+balloon.height) {
+        balloonY = 0+balloon.height; 
+    } else if (balloonY > height-balloon.height) {
+          balloonY = height-balloon.height; 
+      } else if (balloonX < 0+balloon.width) {
+          balloonX= 0+balloon.width; 
+      } else if (balloonX > width-balloon.width){
+           balloonX= width-balloon.width; 
+      }
+}
+
 void oscEvent(OscMessage message) {
 
     float frequency;
@@ -111,11 +161,11 @@ void oscEvent(OscMessage message) {
     if ( frequency > 350.0 ) {
         // Dividerar med 3 för att justera för vissel-frekvenser
         // Subtraherar med 200 för att få den att börja ungefär vid 0
-        posY = ( frequency / 3 ) - 200;
+        balloonY = ( frequency - 600 ) / 3;
     }
 
     // println(theOscMessage.checkAddrPattern("/audio/frequency"));
     // println(theOscMessage.addrInt());
     
-    println(posY);
+    // println(balloonY);
 }
