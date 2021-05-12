@@ -33,9 +33,9 @@ void setup() {
     balloonY = height / 2;
     
     setNotePosition(); 
-
-    playWithMicButton = new Button(loadImage("playWithMic.png"),loadImage("playWithMicHover.png"),100,500); 
-    playWithKeysButton = new Button (loadImage("playWithKeys.png"),loadImage("playWithKeysHover.png"),700,500); 
+    imageMode(CENTER);
+    playWithMicButton = new Button(loadImage("playWithMic.png"),loadImage("playWithMicHover.png"),300,500); 
+    playWithKeysButton = new Button (loadImage("playWithKeys.png"),loadImage("playWithKeysHover.png"),900,500); 
 
     
     speed = 5;
