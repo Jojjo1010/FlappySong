@@ -10,11 +10,13 @@ float noteX, noteY;
 int counter; 
 
 boolean down, up, left, right;
-float speed;
+float speed,balloonSpeed;
 
 PImage balloon;
 PImage note;
 PImage background; 
+PImage keys; 
+PImage micInfo; 
 
 Button playWithMicButton, playWithKeysButton; 
 
@@ -28,6 +30,8 @@ void setup() {
     balloon = loadImage("balloon.png");
     note = loadImage("note.png");
     background = loadImage("sky.png"); 
+    keys=loadImage("keys.png"); 
+    micInfo=loadImage("micInfo.png"); 
     
     balloonX = width / 2;
     balloonY = height / 2;
@@ -37,8 +41,8 @@ void setup() {
     playWithMicButton = new Button(loadImage("playWithMic.png"),loadImage("playWithMicHover.png"),300,500); 
     playWithKeysButton = new Button (loadImage("playWithKeys.png"),loadImage("playWithKeysHover.png"),900,500); 
 
-    
     speed = 5;
+    balloonSpeed=3; 
     
     state = 0; 
 }
@@ -62,6 +66,14 @@ void draw() {
 void startScreen() {
     background(background);
 
+    image(balloon, balloonX, balloonY);
+
+    balloonY=balloonY-balloonSpeed; 
+    if (balloonY<150||balloonY>600) {
+      balloonSpeed=balloonSpeed *-1;
+    }
+
+
     String title;
     String gameDescription1;
     String gameDescription2;
@@ -75,7 +87,7 @@ void startScreen() {
     textSize(30); 
     text(gameDescription1, width / 2, 300); 
     text(gameDescription2, width / 2, 350); 
-
+   
     playWithKeysButton.display(); 
     playWithMicButton.display(); 
 
@@ -84,20 +96,27 @@ void startScreen() {
   void playWithMic() {
    loadGame(); 
 
+   image(micInfo,1100,720);
+
    updateX();
 }
   
   void playWithKeys() {
     loadGame(); 
 
+    image(keys,1100,720); 
+    textSize(15); 
+    fill(#000000); 
+    text("Steer the balloon with your arrow keys",1050,770); 
+
     updateX();
     updateY(); 
 }
   void loadGame() {
     background(background);
-    
+
     imageMode(CENTER);
-    
+
     // ritar not
     image(note, noteX, noteY, 80, 80);
     
