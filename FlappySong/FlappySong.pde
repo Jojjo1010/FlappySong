@@ -215,14 +215,16 @@ void mousePressed() {
         frequency = message.get(0).floatValue();
         
         // försöker ta bort cirkelrörelse från bakgrundsljud
-        // genom att filtrera bort under 200
+        // genom att filtrera bort under 350
         if (frequency > 350.0) {
-            // Dividerar med 3 för att justera för vissel-frekvenser
-            // Subtraherar med 200 för att få den att börja ungefär vid 0
-            balloonY = (frequency - 600) / 4;
+            // Dividerar frekvensen med 2 för att justera för vissling
+            // Subtraherar med 600 för att få den att börja ungefär vid 0
+            balloonY = (frequency - 600) / 2;
+            // inverterar ballongens rörelse
+            balloonY = balloonY * -1 + height;
         }
         
-        println(message.checkAddrPattern("/audio/frequency"));
+        // println(message.checkAddrPattern("/audio/frequency"));
         // println(theOscMessage.addrInt());
         
         // println(balloonY);
