@@ -10,7 +10,7 @@ float noteX, noteY;
 int counter; 
 
 boolean down, up, left, right;
-float speed,balloonSpeed;
+float speed, balloonSpeed;
 
 PImage balloon;
 PImage note;
@@ -18,7 +18,9 @@ PImage background;
 PImage keys; 
 PImage micInfo; 
 
-Button playWithMicButton, playWithKeysButton; 
+String title, gameDescription1, gameDescription2;
+
+Button playWithMicButton, playWithKeysButton, exitButton, playAgainButton; 
 
 void setup() {
     
@@ -26,7 +28,7 @@ void setup() {
     
     
     oscP5 = new OscP5(this, 7348);
-    
+
     balloon = loadImage("balloon.png");
     note = loadImage("note.png");
     background = loadImage("sky.png"); 
@@ -40,7 +42,9 @@ void setup() {
     imageMode(CENTER);
     playWithMicButton = new Button(loadImage("playWithMic.png"),loadImage("playWithMicHover.png"),300,500); 
     playWithKeysButton = new Button (loadImage("playWithKeys.png"),loadImage("playWithKeysHover.png"),900,500); 
-
+    exitButton = new Button(loadImage("exit.png"),loadImage("exitHover.png"),1150,50); 
+    playAgainButton = new Button(loadImage("playAgain.png"), loadImage("playAgainHover.png"), width / 2, 500);
+    
     speed = 5;
     balloonSpeed=3; 
     
@@ -60,23 +64,15 @@ void draw() {
         case 2 : 
             playWithKeys(); 
             break; 
+        case 3 :
+            endScreen();
+            break;
     }
 }
 
 void startScreen() {
     background(background);
 
-    image(balloon, balloonX, balloonY);
-
-    balloonY=balloonY-balloonSpeed; 
-    if (balloonY<150||balloonY>600) {
-      balloonSpeed=balloonSpeed *-1;
-    }
-
-
-    String title;
-    String gameDescription1;
-    String gameDescription2;
     title = "GameTitle";
     gameDescription1 = "Whistle to help the balloon gather its notes!"; 
     gameDescription2 = "You can also play with just the keys";
@@ -85,20 +81,45 @@ void startScreen() {
     textSize(60);
     text(title, width / 2, 200);
     textSize(30); 
-    text(gameDescription1, width / 2, 300); 
-    text(gameDescription2, width / 2, 350); 
-   
-    playWithKeysButton.display(); 
+    text(gameDescription1, width / 2, 250); 
+    text(gameDescription2, width / 2, 300); 
+
+    image(balloon, balloonX, balloonY);
+
+    balloonY=balloonY-balloonSpeed; 
+    if (balloonY<150||balloonY>600) {
+      balloonSpeed=balloonSpeed *-1;
+    }
+
     playWithMicButton.display(); 
+    playWithKeysButton.display(); 
 
 }
 
-  void playWithMic() {
-   loadGame(); 
+void playWithMic() {
+    loadGame(); 
 
-   image(micInfo,1100,720);
+    fill(#ffffff);
+    text("C", 0, 60, width, 60);
+    line(0, 60, width, 60);
+    text("B", 0, 105, width, 105);
+    line(0, 105, width, 105);
+    text("A", 0, 195, width, 195);
+    line(0, 195, width, 195);
+    text("G",0, 285, width, 285);
+    line(0, 285, width, 285);
+    text("F", 0, 375, width, 375);
+    line(0, 375, width, 375);
+    text("E", 0, 420, width, 420);
+    line(0, 420, width, 420);
+    text("D", 20, 510);
+    line(0, 510, width, 510);
+    text("C", 20, 600);
+    line(0, 600, width, 600);
 
-   updateX();
+    image(micInfo,1100,720);
+
+    updateX();
 }
   
   void playWithKeys() {
@@ -112,10 +133,13 @@ void startScreen() {
     updateX();
     updateY(); 
 }
+
   void loadGame() {
     background(background);
 
     imageMode(CENTER);
+
+    exitButton.display();
 
     // ritar not
     image(note, noteX, noteY, 80, 80);
@@ -128,6 +152,25 @@ void startScreen() {
     text(counter, 40, 80);
     
     pointCounter();
+
+}
+
+void endScreen() {
+    background(background);
+    
+    textSize(40);
+    fill(#ffffff);
+    text("Thank you for playing!", width / 2, 200);
+    text("You got " + counter + " points", width / 2, 300);
+
+    balloonY=balloonY-balloonSpeed; 
+    if (balloonY<150||balloonY>600) {
+      balloonSpeed=balloonSpeed *-1;
+    }
+
+    image(balloon, balloonX, balloonY);
+
+    playAgainButton.display();
 }
 
 void updateX() {
@@ -196,11 +239,19 @@ void updateY() {
 
 void mousePressed() {
   if(playWithMicButton.isMouseOverButton()) {
-    state=1; 
+    state = 1; 
   } 
 
   if(playWithKeysButton.isMouseOverButton()) {
-    state=2; 
+    state = 2; 
+  }
+
+  if(exitButton.isMouseOverButton()) {
+      state = 3; 
+  }
+
+  if(playAgainButton.isMouseOverButton()) {
+      state = 0;
   }
 }
   
