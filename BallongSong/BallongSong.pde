@@ -73,7 +73,7 @@ void draw() {
 void startScreen() {
     background(background);
 
-    title = "GameTitle";
+    title = "Ballong-song";
     gameDescription1 = "Whistle to help the balloon gather its notes!"; 
     gameDescription2 = "You can also play with just the keys";
 
@@ -97,25 +97,8 @@ void startScreen() {
 }
 
 void playWithMic() {
-    loadGame(); 
 
-    fill(#ffffff);
-    text("C", 0, 60, width, 60);
-    line(0, 60, width, 60);
-    text("B", 0, 105, width, 105);
-    line(0, 105, width, 105);
-    text("A", 0, 195, width, 195);
-    line(0, 195, width, 195);
-    text("G",0, 285, width, 285);
-    line(0, 285, width, 285);
-    text("F", 0, 375, width, 375);
-    line(0, 375, width, 375);
-    text("E", 0, 420, width, 420);
-    line(0, 420, width, 420);
-    text("D", 20, 510);
-    line(0, 510, width, 510);
-    text("C", 20, 600);
-    line(0, 600, width, 600);
+    loadGame(); 
 
     image(micInfo,1100,720);
 
@@ -137,6 +120,26 @@ void playWithMic() {
   void loadGame() {
     background(background);
 
+    // Ritar ut toner med linjer
+    stroke(#ffffff);
+    fill(#ffffff);
+    text("C", 20, 50);
+    line(0, 60, width, 60);
+    text("B", 20, 95);
+    line(0, 105, width, 105);
+    text("A", 20, 185);
+    line(0, 195, width, 195);
+    text("G", 20, 275);
+    line(0, 285, width, 285);
+    text("F", 20, 365);
+    line(0, 375, width, 375);
+    text("E", 20, 410);
+    line(0, 420, width, 420);
+    text("D", 20, 500);
+    line(0, 510, width, 510);
+    text("C", 20, 590);
+    line(0, 600, width, 600);
+
     imageMode(CENTER);
 
     exitButton.display();
@@ -149,7 +152,8 @@ void playWithMic() {
     
     //ritar counter 
     textSize(42);
-    text(counter, 40, 80);
+    fill(#4488ff);
+    text(counter, 60, height - 40);
     
     pointCounter();
 
